@@ -28,7 +28,11 @@
 
         async function loadData() {
             try {
-                const response = await fetch('https://citysenseco.github.io/diagnostico_atendedores.json');
+
+
+
+                
+               const response = await fetch('https://citysenseco.github.io/diagnostico_atendedores.json?raw=true');
                 fullData = await response.json();
                 console.log("Datos cargados:", fullData.length, "registros");
                 renderCalendar(fullData);
