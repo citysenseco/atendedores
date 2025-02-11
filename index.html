@@ -26,10 +26,29 @@
     <div id="calendar" class="calendar-grid"></div>
     
     <script>
+        let fullData = [];
+
         async function loadData() {
-            const response = await fetch('diagnostico_atendedores.json');
-            const data = await response.json();
-            renderCalendar(data);
+            const response = await fetch('https://citysenseco.github.io/diagnostico_atendedores.json');
+            fullData = await response.json();
+            renderCalendar(fullData);
+        }
+
+        function filterData() {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+            
+            if (!startDate || !endDate) {
+                renderCalendar(fullData);
+                return;
+            }
+            
+            const filteredData = fullData.filter(d => {
+                const dateStr = `${d.anno}-${String(d.mes).padStart(2, '0')}-${String(d.dia).padStart(2, '0')}`;
+                return dateStr >= startDate && dateStr <= endDate;
+            });
+            
+            renderCalendar(filteredData);
         }
 
         function renderCalendar(data) {
