@@ -20,7 +20,7 @@
     <input type="date" id="end-date">
     <button onclick="filterData()">Filtrar</button>
     
-    <h3>Total de bloques sub-dotados: <span id="total-subdotados">0</span></h3>
+    <h3>Total de bloques sub-atendidos: <span id="total-subdotados">0</span></h3>
     <div id="calendar" class="calendar-grid"></div>
     
     <script>
@@ -50,16 +50,16 @@
         }
 
         function renderCalendar(data) {
-            const subDotadosCount = {};
+            const subAtendidosCount = {};
             
             data.forEach(d => {
-                if (d.diagnostico.toLowerCase() === "sub-dotada") {
+                if (d.diagnostico.toLowerCase() === "sub-atendida") {
                     const key = `${d.dia}-${d.hora}`;
-                    subDotadosCount[key] = (subDotadosCount[key] || 0) + 1;
+                    subAtendidosCount[key] = (subAtendidosCount[key] || 0) + 1;
                 }
             });
             
-            document.getElementById("total-subdotados").textContent = Object.keys(subDotadosCount).length;
+            document.getElementById("total-subdotados").textContent = Object.keys(subAtendidosCount).length;
         }
 
         window.onload = loadData;
