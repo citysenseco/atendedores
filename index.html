@@ -10,9 +10,6 @@
         .calendar-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; width: 80%; margin: auto; }
         .cell { padding: 10px; text-align: center; font-size: 14px; color: white; }
         .header { font-weight: bold; background: #444; color: white; }
-        .sub-dotada { background: red; }
-        .correcta { background: green; }
-        .sobre-dotada { background: blue; }
     </style>
 </head>
 <body>
@@ -23,13 +20,13 @@
     <input type="date" id="end-date">
     <button onclick="filterData()">Filtrar</button>
     
+    <h3>Total de bloques sub-dotados: <span id="total-subdotados">0</span></h3>
     <div id="calendar" class="calendar-grid"></div>
     
     <script>
         let fullData = [];
 
         async function loadData() {
-
             const response = await fetch('https://citysenseco.github.io/diagnostico_atendedores.json');
             fullData = await response.json();
             renderCalendar(fullData);
@@ -53,19 +50,16 @@
         }
 
         function renderCalendar(data) {
-            const diasSemana = ["", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-            const horasDia = Array.from({ length: 24 }, (_, i) => i);
-            const calendar = d3.select("#calendar").html("");
+            const subDotadosCount = {};
             
-            calendar.selectAll(".header").data(diasSemana).enter().append("div").attr("class", "cell header").text(d => d);
-            
-            horasDia.forEach(hora => {
-                calendar.append("div").attr("class", "cell header").text(hora);
-                diasSemana.slice(1).forEach(dia => {
-                    const diagnostico = data.find(d => d.dia === dia && d.hora === hora)?.diagnostico.toLowerCase().replace(" ", "-") || "correcta";
-                    calendar.append("div").attr("class", `cell ${diagnostico}`);
-                });
+            data.forEach(d => {
+                if (d.diagnostico.toLowerCase() === "sub-dotada") {
+                    const key = `${d.dia}-${d.hora}`;
+                    subDotadosCount[key] = (subDotadosCount[key] || 0) + 1;
+                }
             });
+            
+            document.getElementById("total-subdotados").textContent = Object.keys(subDotadosCount).length;
         }
 
         window.onload = loadData;
