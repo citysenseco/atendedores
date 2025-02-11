@@ -29,6 +29,7 @@
         let fullData = [];
 
         async function loadData() {
+
             const response = await fetch('https://citysenseco.github.io/diagnostico_atendedores.json');
             fullData = await response.json();
             renderCalendar(fullData);
